@@ -11,17 +11,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/*
- Ejemplo Básico de descarga de contenido desde una URL.
- Nótese cómo se manipula el contenido en memoria, sin realizar el paso por fichero.
-
- Los ejemplos de lanzamiento MainOpenData y MainCovid utilizan estos enlaces respectivamente:
- https://opendata-ajuntament.barcelona.cat/data/dataset/fcef8a36-64df-4231-9145-a4a3ef757f02/resource/cd0220bb-f75d-4737-ac27-339db8650ef6/download
- https://cnecovid.isciii.es/covid19/resources/datos_ccaas.csv
- */
 public class Main {
 
     public static void main(String [] args) throws IOException {
+        /*
         try {
 
             // Create an object of filereader
@@ -32,7 +25,9 @@ public class Main {
             // file reader as a parameter
             CSVReader csvReader = new CSVReader(filereader);
             String[] nextRecord;
+            nextRecord = csvReader.readNext();
 
+            /*
             // we are going to read data line by line
             while ((nextRecord = csvReader.readNext()) != null) {
                 for (String cell : nextRecord) {
@@ -40,9 +35,15 @@ public class Main {
                 }
                 System.out.println();
             }
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+    */
+        App dialog = new App();
+        dialog.pack();
+        dialog.setVisible(true);
+        System.exit(0);
     }
 }
