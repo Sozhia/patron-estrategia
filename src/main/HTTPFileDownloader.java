@@ -10,7 +10,7 @@ import java.net.URL;
  */
 
 public class HTTPFileDownloader {
-    static private int BUFFER_SIZE = 1024;
+    static private int BUFFER_SIZE = 2048;
 
     /*
     Solo hemos implementado métodos estáticos, por lo que no es necesario que se instancie nunca un objeto
@@ -34,7 +34,6 @@ public class HTTPFileDownloader {
                 // Transformación de contenido a String
                 myURLContent += new String(byteContents, 0, bytesRead);
             }
-
             return myURLContent;
         } catch (MalformedURLException e) {
             e.printStackTrace();
