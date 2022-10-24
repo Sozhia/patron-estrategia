@@ -1,6 +1,6 @@
 package main;
 
-public interface DiagramStrategy {
+public interface ChartStrategy {
     void printDiagram();
     StrategyType getType();
 }
