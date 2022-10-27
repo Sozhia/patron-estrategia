@@ -1,7 +1,10 @@
 package main;
 
+import com.opencsv.exceptions.CsvException;
+
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class App extends JDialog {
     private JPanel contentPane;
@@ -26,7 +29,11 @@ public class App extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onOK();
+                try {
+                    onOK();
+                } catch (IOException | CsvException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -64,13 +71,37 @@ public class App extends JDialog {
 
     }
 
-    private void onOK() {
-        // add your code here
+    private void onOK() throws IOException, CsvException {
+        ILoadDataStrategy strategy =
+                LoadDataFactory.createLoadDataStrategy(LoadDataStrategyType.LOCAL);
+        IPrintStrategy printer;
+        ContextLoadData context = new ContextLoadData(strategy);
+        String url;
+
+        if(fileOneRadioButton.isSelected()){
+            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres.csv";
+        } else if (fileTwoRadioButton.isSelected()){
+            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_60_mas.csv";
+        } else {
+            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_todas_edades.csv";
+        }
+
+        DataSet dataset = new DataSet(url, context);
+        dataset.printData();
+
+        if (barsRadioButton.isSelected()) {
+            printer = PrintFactory.createPrintStrategy(PrintStrategyType.BAR);
+        } else {
+            printer = PrintFactory.createPrintStrategy(PrintStrategyType.POINT_CLOUD);
+        }
+
+        printer.printDiagram(dataset);
         dispose();
     }
 
     private void onCancel() {
         // add your code here if necessary
+        System.exit(0);
         dispose();
     }
 }
