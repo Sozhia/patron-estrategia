@@ -25,6 +25,7 @@ public class App extends JDialog {
     public App() {
         setContentPane(contentPane);
         setModal(true);
+
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
@@ -72,31 +73,34 @@ public class App extends JDialog {
     }
 
     private void onOK() throws IOException, CsvException {
-        ILoadDataStrategy strategy =
+        ILoadDataStrategy loadDataStrategy =
                 LoadDataFactory.createLoadDataStrategy(LoadDataStrategyType.LOCAL);
-        IPrintStrategy printer;
-        ContextLoadData context = new ContextLoadData(strategy);
+        IPrintStrategy printerStrategy = null;
+        ContextLoadData contextLoadData = new ContextLoadData(loadDataStrategy);
+
         String url;
 
         if(fileOneRadioButton.isSelected()){
-            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres.csv";
+            url = "C:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres.csv";
         } else if (fileTwoRadioButton.isSelected()){
-            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_60_mas.csv";
+            url = "C:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_60_mas.csv";
         } else {
-            url = "A:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_todas_edades.csv";
+            url = "C:\\Workspace\\DAP\\patron-estrategia\\src\\data\\provres_todas_edades.csv";
         }
 
-        DataSet dataset = new DataSet(url, context);
-        dataset.printData();
+        DataSet dataset = new DataSet(url, contextLoadData);
+        // dataset.printData();
 
         if (barsRadioButton.isSelected()) {
-            printer = PrintFactory.createPrintStrategy(PrintStrategyType.BAR);
-        } else {
-            printer = PrintFactory.createPrintStrategy(PrintStrategyType.POINT_CLOUD);
+            printerStrategy = PrintFactory.createPrintStrategy(PrintStrategyType.BAR);
+        } else if (cloudRadioButton.isSelected()) {
+            printerStrategy = PrintFactory.createPrintStrategy(PrintStrategyType.POINT_CLOUD);
         }
 
-        printer.printDiagram(dataset);
-        dispose();
+        ContextPrintData printContext = new ContextPrintData(printerStrategy);
+
+        printContext.executeStrategy(dataset);
+
     }
 
     private void onCancel() {
@@ -104,4 +108,5 @@ public class App extends JDialog {
         System.exit(0);
         dispose();
     }
+
 }

@@ -8,6 +8,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,14 +17,14 @@ public class DataSet {
     protected List<String[]> data;
 
     DataSet (String url, ContextLoadData loadDataStrategy) throws IOException, CsvException {
-        /*
         List<String[]> aux = loadDataStrategy.executeStrategy(url);
-        for (String[] row : aux) {
-            if (Objects.equals(row[0], "TF") || Objects.equals(row[0], "GC")) {
-                this.data.add(row);
-            }
-        }*/
         this.data = loadDataStrategy.executeStrategy(url);
+        for (int i = 0 ; i < this.data.size() ; i++) {
+            if (Objects.equals(aux.get(i)[0], "TF") || Objects.equals(aux.get(i)[0], "GC")) {
+                this.data.add(aux.get(i));
+                System.out.println(Arrays.toString(aux.get(i)));
+            }
+        }
     }
 
     void printData(){
